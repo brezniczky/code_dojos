@@ -90,7 +90,14 @@ class Lizard(Thing): pass
 class Spock(Thing): pass
 
 
-class TestBeats(unittest.TestCase):
+class BeatsTestCase(unittest.TestCase):
+  def assert_beats(self, class1, class2, result):
+    t1 = class1()
+    t2 = class2()
+    self.assertEquals(t1.beats(t2), result)
+
+
+class TestBeats(BeatsTestCase):
 
   @classmethod
   def setUp(self):
@@ -98,11 +105,6 @@ class TestBeats(unittest.TestCase):
     Thing.set_rules(
       {(Rock, Scissors): True}
     )
-
-  def assert_beats(self, class1, class2, result):
-    t1 = class1()
-    t2 = class2()
-    self.assertEquals(t1.beats(t2), result)
 
   def test_Thing_ties_Thing(self):
     self.assert_beats(Thing, Thing, None)
@@ -118,7 +120,7 @@ class TestBeats(unittest.TestCase):
   def test_Scissors_beatenby_Rock(self):
     self.assert_beats(Scissors, Rock, False)
 
-class TestSetDefaultRules(unittest.TestCase):
+class TestSetDefaultRules(BeatsTestCase):
 
   @classmethod
   def setUp(self):
@@ -130,12 +132,6 @@ class TestSetDefaultRules(unittest.TestCase):
     self.assertEquals(len(Thing.__who_beats_who__), 6 * 6)
     # remark: unless using more structural assumptions, objective exhaustive 
     # testing comes at the cost of data/information redundancy
-
-  # TODO: duplicate, refactor in next round!    
-  def assert_beats(self, class1, class2, result):
-    t1 = class1()
-    t2 = class2()
-    self.assertEquals(t1.beats(t2), result)
 
   # a few spot-checks are still reasonable
   def test_Paper_beats_Spock(self):

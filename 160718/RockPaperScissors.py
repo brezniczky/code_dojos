@@ -78,7 +78,7 @@ class Thing:
 
 class Rock(Thing): pass
 
-class Scissors(Thing): pass 
+class Scissors(Thing): pass
 
 class Paper(Thing): pass
 
@@ -97,8 +97,11 @@ class TestThings(unittest.TestCase):
     t2 = class2()
     self.assertEquals(t1.beats(t2), result)
 
-  def test_Thing_beats_None(self):
+  def test_Thing_ties_Thing(self):
     self.assert_beats(Thing, Thing, None)
+
+  def test_Thing_ties_Rock(self):
+    self.assert_beats(Thing, Rock, None)
 
   def test_Rock_ties_Rock(self):
     self.assert_beats(Rock, Rock, None)
@@ -109,11 +112,8 @@ class TestThings(unittest.TestCase):
   def test_Scissors_beatenby_Rock(self):
     self.assert_beats(Scissors, Rock, False)
 
-  def test_Scissors_beatenby_Rock(self):
-    self.assert_beats(Scissors, Rock, False)
-
-  def test_Paper_beats_Spock(self):
-    self.assert_beats(Paper, Spock, True)
+  def test_Paper_beats_Rock(self):
+    self.assert_beats(Paper, Rock, True)
 
   def test_Paper_beats_Spock(self):
     self.assert_beats(Paper, Spock, True)
@@ -135,6 +135,7 @@ class TestThings(unittest.TestCase):
 
   def test_Lizard_beats_Paper(self):
     self.assert_beats(Lizard, Paper, True)
+
 
 if __name__ == "__main__":
   unittest.main()

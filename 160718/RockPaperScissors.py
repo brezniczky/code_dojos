@@ -46,6 +46,10 @@ class Thing:
     for thing in things:
       who_beats_who[(thing, thing)] = None
 
+    # add tie against a generic Thing
+    for thing in things:
+      who_beats_who[(Thing, thing)] = None
+      who_beats_who[(thing, Thing)] = None
 
     Thing.__who_beats_who__ = who_beats_who
 

@@ -30,8 +30,7 @@ import unittest;
 
 class Thing:
 
-  # automatically extends the ruleset for consistency and assigns it to the 
-  # class of Things
+  # initializes the class to use the default logic when evaluating who wins
   @classmethod
   def set_default_rules(cls):
     Thing.set_rules(
@@ -48,6 +47,8 @@ class Thing:
        (Lizard, Paper): True}
     )
 
+  # automatically extends the ruleset for consistency and assigns it to the 
+  # class of Things
   @classmethod
   def set_rules(cls, who_beats_who):
     things_1 = {pair[0] for pair in who_beats_who}

@@ -29,9 +29,20 @@ import unittest;
 # parameters, maybe a class, which 
 
 class Thing:
+
+  # automatically extends the ruleset for consistency and assigns it to the 
+  # class of Things
+  @classmethod
+  def set_default_rules(cls):
+    Thing.set_rules(
+      {(Thing, Rock): None,
+       (Rock, Scissors): True,
+       (Paper, Rock): True,
+       (Scissors, Paper): True}
+    )
+
   @classmethod
   def set_rules(cls, who_beats_who):
-
     things_1 = {pair[0] for pair in who_beats_who}
     things_2 = {pair[1] for pair in who_beats_who}
     things = things_1.union(things_2)
@@ -63,18 +74,16 @@ class Scissors(Thing): pass
 
 class Paper(Thing): pass
 
-# class Lizard(Thing): pass
+class Lizard(Thing): pass
 
-# class Spock(Thing): pass
-
-Thing.set_rules(
-  {(Thing, Rock): None,
-   (Rock, Scissors): True,
-   (Paper, Rock): True,
-   (Scissors, Paper): True}
-)
+class Spock(Thing): pass
 
 class TestThings(unittest.TestCase):
+
+  @classmethod
+  def setUpClass(cls):
+    Thing.set_default_rules()
+
   def assert_beats(self, class1, class2, result):
     t1 = class1()
     t2 = class2()
@@ -83,11 +92,14 @@ class TestThings(unittest.TestCase):
   def test_Thing_beats_None(self):
     self.assert_beats(Thing, Thing, None)
 
-  def test_Rock_not_beats_Rock(self):
+  def test_Rock_ties_Rock(self):
     self.assert_beats(Rock, Rock, None)
 
   def test_Rock_beats_Scissors(self):
     self.assert_beats(Rock, Scissors, True)
+
+  def test_Scissors_beatenby_Rock(self):
+    self.assert_beats(Scissors, Rock, False)
 
   def test_Scissors_beatenby_Rock(self):
     self.assert_beats(Scissors, Rock, False)

@@ -37,8 +37,15 @@ class Thing:
     Thing.set_rules(
       {(Thing, Rock): None,
        (Rock, Scissors): True,
+       (Rock, Lizard): True,
        (Paper, Rock): True,
-       (Scissors, Paper): True}
+       (Paper, Spock): True,
+       (Scissors, Paper): True,
+       (Scissors, Lizard): True,
+       (Spock, Scissors): True,
+       (Spock, Rock): True,
+       (Lizard, Spock): True,
+       (Lizard, Paper): True}
     )
 
   @classmethod
@@ -103,6 +110,30 @@ class TestThings(unittest.TestCase):
 
   def test_Scissors_beatenby_Rock(self):
     self.assert_beats(Scissors, Rock, False)
+
+  def test_Paper_beats_Spock(self):
+    self.assert_beats(Paper, Spock, True)
+
+  def test_Paper_beats_Spock(self):
+    self.assert_beats(Paper, Spock, True)
+
+  def test_Rock_beats_Lizard(self):
+    self.assert_beats(Rock, Lizard, True)
+
+  def test_Scissors_beat_Lizard(self):
+    self.assert_beats(Scissors, Lizard, True)
+
+  def test_Spock_beats_Scissors(self):
+    self.assert_beats(Spock, Scissors, True)
+
+  def test_Spock_beats_Rock(self):
+    self.assert_beats(Spock, Rock, True)
+
+  def test_Lizard_beats_Spock(self):
+    self.assert_beats(Lizard, Spock, True)
+
+  def test_Lizard_beats_Paper(self):
+    self.assert_beats(Lizard, Paper, True)
 
 if __name__ == "__main__":
   unittest.main()

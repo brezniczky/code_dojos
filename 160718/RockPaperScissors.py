@@ -35,16 +35,23 @@ class Thing:
     things_1 = {pair[0] for pair in who_beats_who}
     things_2 = {pair[1] for pair in who_beats_who}
     things = things_1.union(things_2)
+
+    # add asymmetry (if A beats B then B is beaten by A)
+    for pair, beats in who_beats_who.items():
+      if beats is not None:
+        (A, B) = pair
+        who_beats_who[(B, A)] = not beats
+
     # add "diagonal" (thing - thing: undecisive, i.e. tie)
     for thing in things:
       who_beats_who[(thing, thing)] = None
+
 
     Thing.__who_beats_who__ = who_beats_who
 
   def beats(self, another_thing):
     return(Thing.__who_beats_who__[(self.__class__, \
                                     another_thing.__class__)])
-
 
 class Rock(Thing): pass
 
@@ -59,13 +66,9 @@ class Paper(Thing): pass
 Thing.set_rules(
   {(Thing, Rock): None,
    (Rock, Scissors): True,
-   (Scissors, Rock): False,
-   (Rock, Paper): False,
    (Paper, Rock): True,
-   (Scissors, Paper): True,
-   (Paper, Scissors): False}
+   (Scissors, Paper): True}
 )
-
 
 class TestThings(unittest.TestCase):
   def assert_beats(self, class1, class2, result):

@@ -70,6 +70,9 @@ class Thing:
       who_beats_who[(Thing, thing)] = None
       who_beats_who[(thing, Thing)] = None
 
+    # and generic Thing vs. Thing is a tie, too
+    who_beats_who[(Thing, Thing)] = None
+
     Thing.__who_beats_who__ = who_beats_who
 
   def beats(self, another_thing):
@@ -86,11 +89,15 @@ class Lizard(Thing): pass
 
 class Spock(Thing): pass
 
-class TestThings(unittest.TestCase):
+
+class TestBeats(unittest.TestCase):
 
   @classmethod
-  def setUpClass(cls):
-    Thing.set_default_rules()
+  def setUp(self):
+    # a simple game with rock and scissors only, for testing
+    Thing.set_rules(
+      {(Rock, Scissors): True}
+    )
 
   def assert_beats(self, class1, class2, result):
     t1 = class1()
@@ -100,7 +107,6 @@ class TestThings(unittest.TestCase):
   def test_Thing_ties_Thing(self):
     self.assert_beats(Thing, Thing, None)
 
-  def test_Thing_ties_Rock(self):
     self.assert_beats(Thing, Rock, None)
 
   def test_Rock_ties_Rock(self):
@@ -112,29 +118,43 @@ class TestThings(unittest.TestCase):
   def test_Scissors_beatenby_Rock(self):
     self.assert_beats(Scissors, Rock, False)
 
-  def test_Paper_beats_Rock(self):
-    self.assert_beats(Paper, Rock, True)
+class TestSetDefaultRules(unittest.TestCase):
 
+  @classmethod
+  def setUp(self):
+    Thing.set_default_rules()
+
+  def test_rule_count(self):
+    # every relationship is to be defined in some way
+    # (5 descendant + "Thing") has to relate to themselves in this many ways
+    self.assertEquals(len(Thing.__who_beats_who__), 6 * 6)
+    # remark: unless using more structural assumptions, objective exhaustive 
+    # testing comes at the cost of data/information redundancy
+
+  # TODO: duplicate, refactor in next round!    
+  def assert_beats(self, class1, class2, result):
+    t1 = class1()
+    t2 = class2()
+    self.assertEquals(t1.beats(t2), result)
+
+  # a few spot-checks are still reasonable
   def test_Paper_beats_Spock(self):
     self.assert_beats(Paper, Spock, True)
 
-  def test_Rock_beats_Lizard(self):
-    self.assert_beats(Rock, Lizard, True)
+  def test_Spock_beats_Lizard(self):
+    self.assert_beats(Lizard, Spock, True)
 
-  def test_Scissors_beat_Lizard(self):
-    self.assert_beats(Scissors, Lizard, True)
+  def test_Spock_beats_Lizard(self):
+    self.assert_beats(Lizard, Spock, True)
 
   def test_Spock_beats_Scissors(self):
     self.assert_beats(Spock, Scissors, True)
 
-  def test_Spock_beats_Rock(self):
-    self.assert_beats(Spock, Rock, True)
+  def test_Rock_beats_Scissors(self):
+    self.assert_beats(Rock, Scissors, True)
 
-  def test_Lizard_beats_Spock(self):
-    self.assert_beats(Lizard, Spock, True)
-
-  def test_Lizard_beats_Paper(self):
-    self.assert_beats(Lizard, Paper, True)
+  def test_Scissors_beats_Paper(self):
+    self.assert_beats(Scissors, Paper, True)
 
 
 if __name__ == "__main__":

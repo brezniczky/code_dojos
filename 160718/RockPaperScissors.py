@@ -116,6 +116,7 @@ class TestBeats(BeatsTestCase):
   def test_Thing_ties_Thing(self):
     self.assert_beats(Thing, Thing, None)
 
+  def test_Thing_ties_Everything(self):
     self.assert_beats(Thing, Rock, None)
 
   def test_Rock_ties_Rock(self):

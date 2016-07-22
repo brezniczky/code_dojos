@@ -41,8 +41,7 @@ class Thing:
     @classmethod
     def set_default_rules(cls):
         Thing.set_rules(
-          {(Thing, Rock): None,
-           (Rock, Scissors): True,
+          {(Rock, Scissors): True,
            (Rock, Lizard): True,
            (Paper, Rock): True,
            (Paper, Spock): True,

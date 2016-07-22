@@ -1,32 +1,38 @@
 import unittest;
 
-# Task outline:
+'''
+Task outline:
 
-# First pomodoro
-#
-# 3 classes
-# superclass Thing
-# all have a method "beats" takes an object
-# of class Thing (or a subclass) and returns
-# True, False or None
-#
-# Second pomodoro
-# 
-# Change the classes so that of all the 
-# conditionals are gotten rid of.
-#
-# Third pomodoro
-#
-# Extension: the "Lizard Spock" way.
-# see https://en.wikipedia.org/wiki/Rock-paper-scissors#Additional_weapons
+First pomodoro
 
-# remarks:
-# we don't actually need classes for this - these are simply enums
-#
-# we could just test the "beats" method in isolation - as there are many test 
-# cases, and there is a very simple implementation, it is probably more 
-# reasonable to incorporate the 'beats' logic into the Thing class as 
-# parameters, maybe a class, which 
+  3 classes
+  superclass Thing
+  all have a method "beats" that takes an object of class Thing (or a subclass) 
+  and returns True, False or None
+
+Second pomodoro
+
+  Change the classes so that of all the 
+  conditionals are gotten rid of.
+
+Third pomodoro
+
+  Extension: the "Lizard Spock" way.
+  see https://en.wikipedia.org/wiki/Rock-paper-scissors#Additional_weapons
+
+'''
+
+'''
+remarks:
+
+  we don't actually need classes for these Things - these could be simply enums
+  (but then OO's gone)
+
+  we could just test the "beats" method in isolation - as there are many test 
+  cases, and there is a very simple implementation, it is probably more 
+  reasonable to incorporate the 'beats' logic into the Thing class through
+  parameters, maybe a custom object
+'''
 
 class Thing:
 
@@ -61,6 +67,7 @@ class Thing:
         (A, B) = pair
         who_beats_who[(B, A)] = not beats
 
+    # special element
     # add "diagonal" (thing - thing: undecisive, i.e. tie)
     for thing in things:
       who_beats_who[(thing, thing)] = None
@@ -70,7 +77,7 @@ class Thing:
       who_beats_who[(Thing, thing)] = None
       who_beats_who[(thing, Thing)] = None
 
-    # and generic Thing vs. Thing is a tie, too
+    # and "generic Thing vs. Thing is a tie", too
     who_beats_who[(Thing, Thing)] = None
 
     Thing.__who_beats_who__ = who_beats_who
@@ -120,6 +127,7 @@ class TestBeats(BeatsTestCase):
   def test_Scissors_beatenby_Rock(self):
     self.assert_beats(Scissors, Rock, False)
 
+
 class TestSetDefaultRules(BeatsTestCase):
 
   @classmethod
@@ -132,7 +140,7 @@ class TestSetDefaultRules(BeatsTestCase):
     self.assertEquals(len(Thing.__who_beats_who__), 6 * 6)
     # remark: unless using more structural assumptions, objective exhaustive 
     # testing comes at the cost of data/information redundancy
-
+    
   # a few spot-checks are still reasonable
   def test_Paper_beats_Spock(self):
     self.assert_beats(Paper, Spock, True)
